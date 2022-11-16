@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
@@ -43,9 +43,11 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import axios from "axios";
 import { baseUrl } from "common/baseUrl";
 import swal from "sweetalert";
+import { authenticate } from "common/authenticate";
 
-function Basic() {
+function Basic({ routes, setRoutes, role, setRole, getRoutes }) {
   let navigate = useNavigate();
+  const [authenticated, setAuthenticated] = useState(true);
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [email, setEmail] = useState('');
@@ -68,15 +70,19 @@ function Basic() {
       method: "POST",
       url: baseUrl + '/users/login',
       data: payload
-    }).then((res) => {
-      setEmail(null);
-      setPassword(null);
+    }).then(async (res) => {
+      setEmail('');
+      setPassword('');
       swal("Yes!", "Login successfully", "success");
       localStorage.setItem("auth", res.data.accessToken);
       
+      let { routesUsed, roleUsed } = await getRoutes();
+      setRoutes(routesUsed);
+      setRole(roleUsed);
       return navigate("/dashboard");
     }).catch((err) => {
-      console.log(err)
+      setEmail('');
+      setPassword('');
       swal("Oops!", "Something went wrong!", "error");
       return;
     });
@@ -98,13 +104,16 @@ function Basic() {
       method: "POST",
       url: baseUrl + '/admin/login',
       data: payload
-    }).then((res) => {
+    }).then(async(res) => {
       setEmail(null);
       setPassword(null);
       swal("Yes!", "Login admin successfully", "success");
       localStorage.setItem("auth", res.data.accessToken);
-      
-      return navigate("/dashboard");
+
+      let { routesUsed, roleUsed } = await getRoutes();
+      setRoutes(routesUsed);
+      setRole(roleUsed);
+      return navigate("/dashboard-admin");
     }).catch((err) => {
       console.log(err)
       swal("Oops!", "Something went wrong!", "error");
@@ -113,6 +122,29 @@ function Basic() {
   }
 
   const handleSetIsAdmin = () => setIsAdmin(!isAdmin);
+
+  useEffect(async() => {
+    let token = localStorage.getItem('auth');
+    let authenticatedData = await authenticate(token);
+    if(authenticatedData) {
+      if(authenticatedData.role === "admin") {
+        setAuthenticated(true);
+        return navigate("/dashboard-admin");
+      }
+
+      setAuthenticated(true);
+      return navigate("/dashboard");
+    } 
+
+    setAuthenticated(false);
+  }, [])
+
+
+  if(authenticated) {
+    return (
+      <div></div>
+    )
+  }
 
   return (
     <BasicLayout image={bgImage}>

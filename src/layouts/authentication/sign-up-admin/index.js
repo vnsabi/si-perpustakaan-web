@@ -13,8 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-// react-router-dom components
-import { Link } from "react-router-dom";
+// react components
+import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -32,7 +33,73 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
+import { authenticate } from 'common/authenticate';
+import swal from 'sweetalert';
+import axios from 'axios';
+import { baseUrl } from 'common/baseUrl';
+
 function Cover() {
+  let navigate = useNavigate();
+  let token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const createAdmin = () => {
+    if(
+      !username ||
+      !password
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return;
+    }
+
+    let payload = {
+      name: username,
+      password
+    };
+    axios({
+      method: "POST",
+      url: baseUrl + '/admin/register',
+      data: payload,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      setUsername('');
+      setPassword('');
+      swal("Yes!", "Create admin successfully", "success");
+
+      return navigate("/dashboard-admin");
+    }).catch((err) => {
+      setUsername('');
+      setPassword('');
+      swal("Oops!", "Something went wrong!", "error");
+      return;
+    })
+  }
+
+  useEffect(async() => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      setAuthenticated(false);
+      return navigate("/authentication/sign-in");
+    }
+
+    if(authenticatedData.role === "user") {
+      setAuthenticated(false);
+      return navigate("/dashboard");
+    }
+
+    setAuthenticated(true);
+  }, [])
+
+  if(!authenticated) {
+    return (
+      <div></div>
+    )
+  }
+
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -48,23 +115,36 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
+            Create new admin
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Enter name and password to register admin
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
+
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput 
+                type="text" 
+                label="Name" 
+                variant="standard" 
+                fullWidth 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput
+                type="password" 
+                label="Password" 
+                variant="standard" 
+                fullWidth 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
-            </MDBox>
+{/* 
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Checkbox />
               <MDTypography
@@ -85,13 +165,18 @@ function Cover() {
               >
                 Terms and Conditions
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton 
+                variant="gradient" 
+                color="info" 
+                fullWidth
+                onClick={createAdmin}
+              >
+                create admin
               </MDButton>
             </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
+            {/* <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Already have an account?{" "}
                 <MDTypography
@@ -105,7 +190,7 @@ function Cover() {
                   Sign In Admin
                 </MDTypography>
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>

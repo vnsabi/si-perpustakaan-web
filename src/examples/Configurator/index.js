@@ -15,6 +15,8 @@ Coded by www.creative-tim.com
 
 import { useState, useEffect } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 // react-github-btn
 import GitHubButton from "react-github-btn";
 
@@ -49,6 +51,7 @@ import {
 } from "context";
 
 function Configurator() {
+  let navigate = useNavigate();
   const [controller, dispatch] = useMaterialUIController();
   const {
     openConfigurator,
@@ -126,6 +129,11 @@ function Configurator() {
       color: darkMode ? background.sidenav : white.main,
     },
   });
+
+  const signOut = () => {
+    localStorage.removeItem('auth');
+    return navigate("/authentication/sign-in");
+  }
 
   return (
     <ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
@@ -287,15 +295,16 @@ function Configurator() {
         <Divider />
         <MDBox mt={3} mb={2}>
           <MDButton
-            component={Link}
-            href="https://www.creative-tim.com/learning-lab/react/quick-start/material-dashboard/"
-            target="_blank"
+            // component={Link}
+            // href="https://www.creative-tim.com/learning-lab/react/quick-start/material-dashboard/"
+            // target="_blank"
             rel="noreferrer"
-            color={darkMode ? "light" : "dark"}
-            variant="outlined"
+            color={"error"}
+            // variant="outlined"
             fullWidth
+            onClick={signOut}
           >
-            view documentation
+            sign out
           </MDButton>
         </MDBox>
         <MDBox display="flex" justifyContent="center">

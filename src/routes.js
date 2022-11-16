@@ -48,15 +48,16 @@ import SignUpAdmin from "layouts/authentication/sign-up-admin";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import DashboardAdmin from "layouts/admin_dashboard";
 
 export const adminRoutes = [
   {
     type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
+    name: "Dashboard Admin",
+    key: "dashboard-admin",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
+    route: "/dashboard-admin",
+    component: <DashboardAdmin />,
   },
   {
     type: "collapse",
@@ -98,14 +99,14 @@ export const adminRoutes = [
     route: "/profile",
     component: <Profile />,
   },
-  {
-    type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Sign In",
+  //   key: "sign-in",
+  //   icon: <Icon fontSize="small">login</Icon>,
+  //   route: "/authentication/sign-in",
+  //   component: <SignIn />,
+  // },
   {
     type: "collapse",
     name: "Sign Up",
@@ -116,10 +117,10 @@ export const adminRoutes = [
   },
   {
     type: "collapse",
-    name: "Sign Up Admin",
-    key: "sign-up-admin",
+    name: "Create New Admin",
+    key: "create-new-admin",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up-admin",
+    route: "/create-new-admin",
     component: <SignUpAdmin />,
   },
 ];

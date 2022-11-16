@@ -62,6 +62,8 @@ import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import DashboardAdmin from "layouts/admin_dashboard";
+import SignUpAdmin from "layouts/authentication/sign-up-admin";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -121,54 +123,53 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-
-  useEffect(async () => {
-    
-    const getRoutes = async () => {
-      let token = localStorage.getItem('auth');
-      try {
-        let response = await axios({
-          method: "GET",
-          url: baseUrl + '/auth/profile',
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        if(response.data.role === "admin") return {
-          routesUsed: adminRoutes,
-          roleUsed: "admin"
-        };
-        return { 
-          routesUsed: userRoutes,
-          roleUsed: "user"
-        };
-      } catch(error) {
-        return { 
-          routesUsed: userRoutes,
-          roleUsed: null
-        };
-      }
-
+  
+  const getRoutes = async () => {
+    let token = localStorage.getItem('auth');
+    try {
+      let response = await axios({
+        method: "GET",
+        url: baseUrl + '/auth/profile',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(response.data.role === "admin") return {
+        routesUsed: adminRoutes,
+        roleUsed: "admin"
+      };
+      return { 
+        routesUsed: userRoutes,
+        roleUsed: "user"
+      };
+    } catch(error) {
+      return { 
+        routesUsed: userRoutes,
+        roleUsed: null
+      };
     }
 
+  }
+
+  useEffect(async () => {
     let { routesUsed, roleUsed } = await getRoutes();
     setRoutes(routesUsed);
     setRole(roleUsed);
   }, []);
 
-  const handleRoutes = () => {
-    routes.map((route) => {
-      // if (route.collapse) {
-      //   return getRoutes(route.collapse);
-      // }
+  // const handleRoutes = () => {
+  //   routes.map((route) => {
+  //     if (route.collapse) {
+  //       return getRoutes(route.collapse);
+  //     }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
+  //     if (route.route) {
+  //       return <Route exact path={route.route} element={route.component} key={route.key} />;
+  //     }
 
-      return null;
-    });
-  }
+  //     return null;
+  //   });
+  // }
 
   const configsButton = (
     <MDBox
@@ -215,14 +216,29 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+          <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
           <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
           <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
           <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
           <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
           <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
-          <Route exact path={'/authentication/sign-in'} element={<SignIn />} key={"sign-in"} />
+          <Route 
+            exact 
+            path={'/authentication/sign-in'} 
+            element={
+              <SignIn 
+                routes={routes}
+                setRoutes={setRoutes} 
+                role={role} 
+                setRole={setRole}
+                getRoutes={getRoutes}
+              />
+            }
+            key={"sign-in"} 
+          />
           <Route exact path={'/authentication/sign-up'} element={<SignUp />} key={"sign-up"} />
+          <Route exact path={'/create-new-admin'} element={<SignUpAdmin />} key={"create-new-admin"} />
           {
             !role
             ?
@@ -254,14 +270,30 @@ export default function App() {
       <Routes>
         {/* {handleRoutes} */}
         <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+          <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
         <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
         <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
         <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
         <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
         <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
-        <Route exact path={'/authentication/sign-in'} element={<SignIn />} key={"sign-in"} />
+
+        <Route 
+          exact 
+          path={'/authentication/sign-in'} 
+          element={
+            <SignIn 
+              routes={routes}
+              setRoutes={setRoutes} 
+              role={role} 
+              setRole={setRole}
+              getRoutes={getRoutes}
+            />
+          }
+          key={"sign-in"} 
+        />
         <Route exact path={'/authentication/sign-up'} element={<SignUp />} key={"sign-up"} />
+        <Route exact path={'/create-new-admin'} element={<SignUpAdmin />} key={"create-new-admin"} />
         {
           !role
           ?

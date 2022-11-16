@@ -13,6 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 
@@ -35,8 +38,34 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { authenticate } from 'common/authenticate';
+
 function Dashboard() {
+  let navigate = useNavigate();
+  const [authenticated, setAuthenticated] = useState(true);
   const { sales, tasks } = reportsLineChartData;
+
+  useEffect(async() => {
+    let token = localStorage.getItem('auth');
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      setAuthenticated(false);
+      return navigate("/authentication/sign-in");
+    }
+
+    if(authenticatedData.role === "admin") {
+      setAuthenticated(false);
+      return navigate("/dashboard-admin");
+    }
+
+    setAuthenticated(true);
+  }, [])
+
+  if(!authenticated) {
+    return (
+      <div></div>
+    )
+  }
 
   return (
     <DashboardLayout>

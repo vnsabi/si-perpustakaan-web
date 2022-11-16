@@ -49,7 +49,7 @@ import SignUpAdmin from "layouts/authentication/sign-up-admin";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
-const routes = [
+export const adminRoutes = [
   {
     type: "collapse",
     name: "Dashboard",
@@ -124,4 +124,39 @@ const routes = [
   },
 ];
 
-export default routes;
+export const userRoutes = [
+  {
+    type: "collapse",
+    name: "Dashboard",
+    key: "dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+  }
+]
+
+function getRole() {
+  let role = ''
+  let token = localStorage.getItem('auth');
+
+    // axios({
+    //   method: "GET",
+    //   url: baseUrl + '/auth/profile',
+    //   headers: {
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // }).then((res) => {
+    //   role = res.data.role;
+    //   console.log(res.data.role, "RUOLE")
+    // }).catch((err) => {
+    //   role = "user"
+    // });
+    
+    // console.log(adminRoutes, "ADMI ROUTES >>>")
+    // if(role === "admin") {
+    //   return adminRoutes;
+    // }
+    // console.log("USER COK >")
+  return userRoutes;
+}
+

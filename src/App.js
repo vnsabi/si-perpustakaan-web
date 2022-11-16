@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -44,7 +44,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // SUKANA React routes
-import routes from "routes";
+import { userRoutes, adminRoutes } from './routes';
 
 // SUKANA React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -52,6 +52,16 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import axios from "axios";
+import { baseUrl } from "common/baseUrl";
+import Dashboard from "layouts/dashboard";
+import Tables from "layouts/tables";
+import RTL from "layouts/rtl";
+import Billing from "layouts/billing";
+import Notifications from "layouts/notifications";
+import Profile from "layouts/profile";
+import SignIn from "layouts/authentication/sign-in";
+import SignUp from "layouts/authentication/sign-up";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -65,6 +75,8 @@ export default function App() {
     whiteSidenav,
     darkMode,
   } = controller;
+  const [routes, setRoutes] = useState([]);
+  const [role, setRole] = useState(null);
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
@@ -109,11 +121,46 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
+
+  useEffect(async () => {
+    
+    const getRoutes = async () => {
+      let token = localStorage.getItem('auth');
+      try {
+        let response = await axios({
+          method: "GET",
+          url: baseUrl + '/auth/profile',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if(response.data.role === "admin") return {
+          routesUsed: adminRoutes,
+          roleUsed: "admin"
+        };
+        return { 
+          routesUsed: userRoutes,
+          roleUsed: "user"
+        };
+      } catch(error) {
+        return { 
+          routesUsed: userRoutes,
+          roleUsed: null
+        };
       }
+
+    }
+
+    let { routesUsed, roleUsed } = await getRoutes();
+    setRoutes(routesUsed);
+    setRole(roleUsed);
+  }, []);
+
+  const handleRoutes = () => {
+    routes.map((route) => {
+      // if (route.collapse) {
+      //   return getRoutes(route.collapse);
+      // }
 
       if (route.route) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
@@ -121,6 +168,7 @@ export default function App() {
 
       return null;
     });
+  }
 
   const configsButton = (
     <MDBox
@@ -166,8 +214,22 @@ export default function App() {
         )}
         {layout === "vr" && <Configurator />}
         <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+          <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
+          <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
+          <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
+          <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
+          <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+          <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+          <Route exact path={'/authentication/sign-in'} element={<SignIn />} key={"sign-in"} />
+          <Route exact path={'/authentication/sign-up'} element={<SignUp />} key={"sign-up"} />
+          {
+            !role
+            ?
+            <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+            :
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          }
         </Routes>
       </ThemeProvider>
     </CacheProvider>
@@ -190,8 +252,23 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        {/* {handleRoutes} */}
+        <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+        <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
+        <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
+        <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
+        <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
+        <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+        <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+        <Route exact path={'/authentication/sign-in'} element={<SignIn />} key={"sign-in"} />
+        <Route exact path={'/authentication/sign-up'} element={<SignUp />} key={"sign-up"} />
+        {
+          !role
+          ?
+          <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+          :
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        }
       </Routes>
     </ThemeProvider>
   );

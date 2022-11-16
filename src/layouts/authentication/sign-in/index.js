@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -40,9 +40,77 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import axios from "axios";
+import { baseUrl } from "common/baseUrl";
+import swal from "sweetalert";
 
 function Basic() {
+  let navigate = useNavigate();
+
   const [isAdmin, setIsAdmin] = useState(false);
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginUser = () => {
+    if(
+      !email ||
+      !password
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return;
+    }
+    let payload = {
+      email,
+      password
+    };
+    axios({
+      method: "POST",
+      url: baseUrl + '/users/login',
+      data: payload
+    }).then((res) => {
+      setEmail(null);
+      setPassword(null);
+      swal("Yes!", "Login successfully", "success");
+      localStorage.setItem("auth", res.data.accessToken);
+      
+      return navigate("/dashboard");
+    }).catch((err) => {
+      console.log(err)
+      swal("Oops!", "Something went wrong!", "error");
+      return;
+    });
+  }
+
+  const loginAdmin = () => {
+    if(
+      !username ||
+      !password
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return;
+    }
+    let payload = {
+      name: username,
+      password
+    };
+    axios({
+      method: "POST",
+      url: baseUrl + '/admin/login',
+      data: payload
+    }).then((res) => {
+      setEmail(null);
+      setPassword(null);
+      swal("Yes!", "Login admin successfully", "success");
+      localStorage.setItem("auth", res.data.accessToken);
+      
+      return navigate("/dashboard");
+    }).catch((err) => {
+      console.log(err)
+      swal("Oops!", "Something went wrong!", "error");
+      return;
+    });
+  }
 
   const handleSetIsAdmin = () => setIsAdmin(!isAdmin);
 
@@ -61,7 +129,7 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
+            Sign in page
           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
@@ -83,11 +151,19 @@ function Basic() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
+            {
+              isAdmin 
+              ?
+              <MDBox mb={2}>
+                <MDInput type="text" value={username} onChange={(e) => setUsername(e.target.value)} label="Username" fullWidth />
+              </MDBox>
+              :
+              <MDBox mb={2}>
+                <MDInput type="email" value={email} onChange={(e) => setEmail(e.target.value)} label="Email" fullWidth />
+              </MDBox>
+            }
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} label="Password" fullWidth />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={isAdmin} onChange={handleSetIsAdmin} />
@@ -102,8 +178,8 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton onClick={isAdmin ? loginAdmin : loginUser} variant="gradient" color="info" fullWidth>
+                sign in now
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">

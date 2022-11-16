@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 
 // react-router-dom components
 import { Link } from "react-router-dom";
+import { useState } from 'react';
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -25,25 +26,62 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import axios from 'axios';
 
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import { baseUrl } from "common/baseUrl";
+import swal from "sweetalert";
 
 function Cover() {
 
-  // const [name, setName] = useState(null);
-  // const [email, setEmail] = useState(null);
-  // const [password, setPassword] = useState(null);
-  // const [nis, setNis] = useState(null);
-  // const [study, setStudy] = useState(null);
-  // const [className, setClassName] = useState(null);
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [nisId, setNis] = useState(null);
+  const [study, setStudy] = useState(null);
+  const [className, setClassName] = useState(null);
 
 
   const register = () => {
-
+    if(
+      !name ||
+      !email ||
+      !password ||
+      !nisId ||
+      !study ||
+      !className
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return
+    }
+    let payload = {
+      name,
+      email,
+      password,
+      nisId,
+      study,
+      className
+    };
+    axios.post(
+      baseUrl + '/users/register',
+      payload
+    ).then(async (res) => {
+      setName(null);
+      setEmail(null);
+      setPassword(null);
+      setNis(null)
+      setStudy(null)
+      setClassName(null)
+      swal("Yes!", "Register success", "success");
+      return;
+    }).catch((err) => {
+      swal("Oops!", "Something went wrong!", "error");
+      return;
+    });
   }
 
   return (
@@ -70,22 +108,64 @@ function Cover() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setName(e.target.value)} 
+                value={name}
+                type="text" 
+                label="Name" 
+                variant="standard" 
+                fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setEmail(e.target.value)} 
+                value={email}
+                type="email" 
+                label="Email" 
+                variant="standard" 
+                fullWidth 
+              />
             </MDBox>
             <MDBox mb={4}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setPassword(e.target.value)} 
+                value={password}
+                type="password" 
+                label="Password" 
+                variant="standard" 
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="NIS" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setNis(e.target.value)} 
+                value={nisId}
+                type="text" 
+                label="NIS" 
+                variant="standard" 
+                fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="Studi/Jurusan" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setStudy(e.target.value)} 
+                value={study}
+                type="text" 
+                label="Studi/Jurusan" 
+                variant="standard" 
+                fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="text" label="Nama Kelas" variant="standard" fullWidth />
+              <MDInput 
+                onChange={(e) => setClassName(e.target.value)} 
+                value={className}
+                type="text" 
+                label="Nama Kelas" 
+                variant="standard" 
+                fullWidth 
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Checkbox />
@@ -109,7 +189,7 @@ function Cover() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton onClick={() => register()} variant="gradient" color="info" fullWidth>
                 sign in
               </MDButton>
             </MDBox>

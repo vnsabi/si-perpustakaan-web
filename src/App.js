@@ -66,6 +66,7 @@ import DashboardAdmin from "layouts/admin_dashboard";
 import SignUpAdmin from "layouts/authentication/sign-up-admin";
 import Admins from "layouts/admins";
 import Books from "layouts/books";
+import Members from "layouts/members";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -221,6 +222,7 @@ export default function App() {
           <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
           <Route exact path={'/tables'} element={<Tables />} key={"tables"} />       
           <Route exact path={'/books'} element={<Books />} key={"books"} />        
+          <Route exact path={'/members'} element={<Members />} key={"members"} />        
           <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
           <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
@@ -277,6 +279,7 @@ export default function App() {
         <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
         <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
         <Route exact path={'/books'} element={<Books />} key={"books"} />        
+        <Route exact path={'/members'} element={<Members />} key={"members"} />        
         <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
         <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />

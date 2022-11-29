@@ -51,6 +51,7 @@ import Icon from "@mui/material/Icon";
 import DashboardAdmin from "layouts/admin_dashboard";
 import Admins from "layouts/admins";
 import Books from "layouts/books";
+import Members from "layouts/members";
 
 export const adminRoutes = [
   {
@@ -76,6 +77,14 @@ export const adminRoutes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/books",
     component: <Books />,
+  },
+  {
+    type: "collapse",
+    name: "Members",
+    key: "members",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/members",
+    component: <Members />,
   },
   {
     type: "collapse",

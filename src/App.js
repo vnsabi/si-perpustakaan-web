@@ -64,6 +64,8 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import DashboardAdmin from "layouts/admin_dashboard";
 import SignUpAdmin from "layouts/authentication/sign-up-admin";
+import Admins from "layouts/admins";
+import Books from "layouts/books";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -217,7 +219,9 @@ export default function App() {
         <Routes>
           <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
           <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
-          <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
+          <Route exact path={'/tables'} element={<Tables />} key={"tables"} />       
+          <Route exact path={'/books'} element={<Books />} key={"books"} />        
+          <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
           <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
           <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
@@ -270,8 +274,10 @@ export default function App() {
       <Routes>
         {/* {handleRoutes} */}
         <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
-          <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
+        <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
         <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
+        <Route exact path={'/books'} element={<Books />} key={"books"} />        
+        <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
         <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
         <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />

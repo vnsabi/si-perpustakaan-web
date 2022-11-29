@@ -49,6 +49,8 @@ import SignUpAdmin from "layouts/authentication/sign-up-admin";
 // @mui icons
 import Icon from "@mui/material/Icon";
 import DashboardAdmin from "layouts/admin_dashboard";
+import Admins from "layouts/admins";
+import Books from "layouts/books";
 
 export const adminRoutes = [
   {
@@ -59,13 +61,29 @@ export const adminRoutes = [
     route: "/dashboard-admin",
     component: <DashboardAdmin />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Tables",
+  //   key: "tables",
+  //   icon: <Icon fontSize="small">table_view</Icon>,
+  //   route: "/tables",
+  //   component: <Tables />,
+  // },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
+    name: "Books",
+    key: "books",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    route: "/books",
+    component: <Books />,
+  },
+  {
+    type: "collapse",
+    name: "Admins",
+    key: "admins",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/admins",
+    component: <Admins />,
   },
   {
     type: "collapse",
@@ -75,14 +93,14 @@ export const adminRoutes = [
     route: "/billing",
     component: <Billing />,
   },
-  {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "RTL",
+  //   key: "rtl",
+  //   icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+  //   route: "/rtl",
+  //   component: <RTL />,
+  // },
   {
     type: "collapse",
     name: "Notifications",

@@ -1,31 +1,57 @@
 
 import { useState } from 'react';
 
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-
 // Images
 import MDButton from "components/MDButton";
 import { Grid } from "@mui/material";
 
-export default function ActionSide() {
+export default function ActionSide({ 
+  bookId,
+  title,
+  code,
+  qty, 
+
+  titleEdit,
+  codeEdit,
+  qtyEdit,
+
+  setBookId,
+  editedBookId,
+  update,
+
+  getBookById,
+
+  deleteBook
+}) {
   const [ isEditActive, setIsEditActive ] = useState(false);
   
   const setIsEdit = (activeStatus) => {
     setIsEditActive(activeStatus);
+    if(activeStatus) {
+      titleEdit = title;
+      codeEdit = code;
+      qtyEdit = qty;
+      setBookId(bookId);
+      getBookById(bookId)
+      return;
+    }
+
+    setBookId(null);
+    return;
   }
   
   return (
     <Grid container>
       <Grid item xs={6}>
         {
-          isEditActive 
+          isEditActive &&
+          editedBookId === bookId
           ?
           <MDButton 
             variant="gradient" 
             color="info" 
             size="small"
+            onClick={update}
           >
             Save
           </MDButton>
@@ -42,7 +68,8 @@ export default function ActionSide() {
       </Grid>
       <Grid item xs={6}>
         {
-          isEditActive 
+          isEditActive &&
+          editedBookId === bookId
           ?
           <MDButton 
             variant="gradient" 
@@ -57,6 +84,7 @@ export default function ActionSide() {
             variant="gradient" 
             color="error" 
             size="small"
+            onClick={() => deleteBook(bookId)}
           >
             Delete
           </MDButton>

@@ -15,7 +15,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -26,77 +26,249 @@ import ActionSide from './actionSide';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
 import { dateFormatter } from 'common/dateFormat';
+import MDInput from "components/MDInput";
+import swal from 'sweetalert';
 
-export default function data() {
-  const [books, setBooks] = useState([]);
+export default function data(books) {
+  const [editedBookId, setEditedBookId] = useState(0);
+  const [titlePlc, setTitlePlc] = useState('');
+  const [codePlc, setCodePlc] = useState('');
+  const [qtyPlc, setQtyPlc] = useState('');
   const token = localStorage.getItem('auth');
-  const [ isEditActive, setIsEditActive ] = useState(false);
 
-  const getBooks = async () => {
-    try {
-      let response = await axios({
+  let titleEdit = '';
+  let codeEdit = '';
+  let qtyEdit = 0;
+
+  const getBookById = (id) => {
+    if(id) {
+      axios({
         method: "GET",
-        url: baseUrl + '/books',
+        url: baseUrl + '/books/' + id,
         headers: {
           Authorization: `Bearer ${token}`
         }
-      });
-      let booksData = response.data.data;
-      let bookRows = [];
-      for(let book of booksData) {
-        bookRows.push(
-          generateRow(
-            book.title,
-            book.code,
-            book.quantity,
-            book.createdAt
-          )
-        )
-      }
-      setBooks(bookRows);
-      return;
-    } catch(error) {
-      console.log(error)
-      return;
-    }
+      })
+      .then((res) => {
+        let bookData = res.data;
+        setTitlePlc(bookData.title);
+        setCodePlc(bookData.code);
+        setQtyPlc(bookData.quantity);
+      })
+      .catch((err) => {
 
+      })
+    }
   }
 
-  useEffect(async () => {
-    await getBooks()
-  }, [])
+  const update = () => {
+    if(
+      !editedBookId
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return;
+    }
+    axios({
+      method: "PUT",
+      url: baseUrl + '/books/update',
+      data: {
+        bookId: editedBookId,
+        title: titleEdit ? titleEdit : titlePlc,
+        code: codeEdit ? codeEdit : codePlc,
+        quantity: qtyEdit ? Number(qtyEdit) : qtyPlc
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((res) => {
+      swal("Yes!", "Update book successfully", "success");
+      window.location.reload(false);
+      return;
+    })
+    .catch((err) => {
+      swal("Oops!", "Something went wrong!", "error");
+    })
+  }
 
-  const Text = ({ value }) => (
-    <MDBox display="flex" alignItems="center" lineHeight={1}>
+  const deleteBook = (bookId) => {
+    swal("Are you sure you want to delete this book?", {
+      buttons: ["No", "Yes"],
+    }).then((res) => {
+      if(res) {
+        axios({
+          method: "DELETE",
+          url: baseUrl + '/books/' + bookId,
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then((res) => {
+          swal("Yes!", "Book deleted", "success");
+          window.location.reload(false);
+          return;
+        })
+        .catch((err) => {
+          swal("Oops!", "Something went wrong!", "error");
+        })
+      }
+    })
+    .catch((err) => {
+    });
+  }
+
+  const handleChangeTitle = (val) => {
+    titleEdit = val;
+  }
+
+  const handleChangeCode = (val) => {
+    codeEdit = val;
+  }
+
+  const handleChangeQty = (val) => {
+    qtyEdit = val;
+  }
+
+  function Title({ 
+    value, 
+    bookId,
+  }) {
+    if(editedBookId === bookId) return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDInput 
+          type="text"
+          label="Title"
+          placeholder={value} 
+          variant="standard"
+          onChange={(e) => handleChangeTitle(e.target.value ? e.target.value : value)}
+        />
+      </MDBox>
+    )
+  
+    return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {value}
         </MDTypography>
-    </MDBox>
-  );
+      </MDBox>
+    );
+  }
 
-  const generateRow = (
-    title,
-    code,
-    quantity,
-    createdAt
-  ) => {
-    return {
-      title: <Text value={title} />,
-      code: <Text value={code} />,
-      qty: <Text value={quantity} />,
-      // function: <Job title="Manager" description="Organization" />,
-      // status: (
-      //   <MDBox ml={-1}>
-      //     <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
-      //   </MDBox>
-      // ),
-      createdDate: (
-        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          {dateFormatter(createdAt)}
+  function Code({ 
+    value, 
+    bookId
+  }) {
+    if(editedBookId === bookId) return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDInput 
+          type="text"
+          placeholder={value} 
+          variant="standard" 
+          label="Code"
+          onChange={(e) => handleChangeCode(e.target.value ? e.target.value : value)}
+        />
+      </MDBox>
+    )
+  
+    return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {value}
         </MDTypography>
-      ),
+      </MDBox>
+    );
+  }
 
-      action: <ActionSide />,
+  function Qty({ 
+    value, 
+    bookId
+  }) {
+    if(editedBookId === bookId) return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDInput 
+          type="number"
+          label="Quantity"
+          placeholder={value.toString()} 
+          variant="standard" 
+          onChange={(e) => handleChangeQty(e.target.value ? e.target.value : value)}
+        />
+      </MDBox>
+    )
+  
+    return (
+      <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {value}
+        </MDTypography>
+      </MDBox>
+    );
+  }
+
+  const renderRows = () => {
+    return books.map((val, idx) => {
+      return {
+        title: <Title 
+          value={val.title} 
+          bookId={val.id} 
+          editedBookId={editedBookId}
+        />,
+        code: <Code 
+          value={val.code} 
+          bookId={val.id}
+          editedBookId={editedBookId}
+        />,
+        qty: <Qty 
+          value={val.quantity} 
+          bookId={val.id}
+          editedBookId={editedBookId}
+        />,
+        // function: <Job title="Manager" description="Organization" />,
+        // status: (
+        //   <MDBox ml={-1}>
+        //     <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
+        //   </MDBox>
+        // ),
+        createdDate: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            {dateFormatter(val.createdAt)}
+          </MDTypography>
+        ),
+  
+        action: <ActionSide 
+          bookId={val.id}
+          title={val.title}
+          code={val.code}
+          qty={val.quantity}
+
+          titleEdit={titleEdit}
+          codeEdit={codeEdit}
+          qtyEdit={qtyEdit}
+
+          
+
+          setBookId={setEditedBookId}
+          editedBookId={editedBookId}
+          update={update}
+
+          getBookById={getBookById}
+
+          deleteBook={deleteBook}
+        />,
+      }
+    })
+  }
+  
+  if(!books.length) {
+    return {
+      columns: [
+        { Header: "title", accessor: "title", width: "30%", align: "left" },
+        { Header: "code", accessor: "code", align: "center" },
+        { Header: "qty", accessor: "qty", align: "center" },
+        { Header: "created at", accessor: "createdDate", align: "center" },
+        { Header: "action", accessor: "action", align: "center" },
+      ],
+  
+      rows: [],
     }
   }
 
@@ -109,6 +281,6 @@ export default function data() {
       { Header: "action", accessor: "action", align: "center" },
     ],
 
-    rows: books,
+    rows: renderRows(),
   };
 }

@@ -41,9 +41,6 @@ import { baseUrl } from 'common/baseUrl';
 
 function Members() {
   const [showAdd, setShowAdd] = useState(false)
-  const [title, setTite] = useState(null);
-  const [code, setCode] = useState(null);
-  const [qty, setQty] = useState(0);
 
   const [books, setBooks] = useState([]);
   const [titleSearch, setTitleSearch] = useState('');
@@ -74,6 +71,26 @@ function Members() {
     }
 
   }
+
+  const getMembers = async () => {
+    try {
+      let url = baseUrl + '/users';
+      let response = await axios({
+        method: "GET",
+        url,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      let booksData = response.data.data;
+      setBooks(booksData)
+      return;
+    } catch(error) {
+      console.log(error)
+      return;
+    }
+
+  }
   
   const search = () => {
     getBooks(titleSearch);
@@ -82,39 +99,6 @@ function Members() {
   useEffect(async () => {
     await getBooks()
   }, [])
-
-  const create = () => {
-    if(
-      !title ||
-      !code ||
-      !qty
-    ) {
-      swal("Oops!", "Some field are missing!", "warning");
-      return;
-    }
-    let payload = {
-      title,
-      code,
-      quantity: qty
-    };
-    axios({
-      method: "POST",
-      url: baseUrl + '/books/create',
-      data: payload,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      swal("Yes!", "Create book successfully", "success");
-      window.location.reload(false);
-      return;
-    })
-    .catch((err) => {
-      swal("Oops!", "Something went wrong!", "error");
-      return
-    })
-  }
   
   if(!books) {
     return (

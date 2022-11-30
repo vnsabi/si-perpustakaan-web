@@ -225,7 +225,7 @@ function Basic({ routes, setRoutes, role, setRole, getRoutes }) {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign up admin
+                  Sign up
                 </MDTypography>
               </MDTypography>
             </MDBox>

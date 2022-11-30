@@ -44,7 +44,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // SUKANA React routes
-import { userRoutes, adminRoutes } from './routes';
+import { userRoutes, adminRoutes, guestRoutes } from './routes';
 
 // SUKANA React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -67,6 +67,7 @@ import SignUpAdmin from "layouts/authentication/sign-up-admin";
 import Admins from "layouts/admins";
 import Books from "layouts/books";
 import Members from "layouts/members";
+import BookDashboard from "layouts/book-dashboard";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -147,7 +148,7 @@ export default function App() {
       };
     } catch(error) {
       return { 
-        routesUsed: userRoutes,
+        routesUsed: guestRoutes,
         roleUsed: null
       };
     }
@@ -228,7 +229,7 @@ export default function App() {
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
           <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
           <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
-          <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+          <Route exact path={'/main-page'} element={<BookDashboard />} key={"main-page"} />
           <Route 
             exact 
             path={'/authentication/sign-in'} 
@@ -248,7 +249,7 @@ export default function App() {
           {
             !role
             ?
-            <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+            <Route path="*" element={<Navigate to="/main-page" />} />
             :
             <Route path="*" element={<Navigate to="/dashboard" />} />
           }
@@ -285,7 +286,7 @@ export default function App() {
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
         <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
         <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
-        <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
+        <Route exact path={'/main-page'} element={<BookDashboard />} key={"main-page"} />
 
         <Route 
           exact 
@@ -306,7 +307,7 @@ export default function App() {
         {
           !role
           ?
-          <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+          <Route path="*" element={<Navigate to="/main-page" />} />
           :
           <Route path="*" element={<Navigate to="/dashboard" />} />
         }

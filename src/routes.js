@@ -52,6 +52,7 @@ import DashboardAdmin from "layouts/admin_dashboard";
 import Admins from "layouts/admins";
 import Books from "layouts/books";
 import Members from "layouts/members";
+import BookDashboard from "layouts/book-dashboard";
 
 export const adminRoutes = [
   {
@@ -62,14 +63,6 @@ export const adminRoutes = [
     route: "/dashboard-admin",
     component: <DashboardAdmin />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Tables",
-  //   key: "tables",
-  //   icon: <Icon fontSize="small">table_view</Icon>,
-  //   route: "/tables",
-  //   component: <Tables />,
-  // },
   {
     type: "collapse",
     name: "Books",
@@ -82,7 +75,7 @@ export const adminRoutes = [
     type: "collapse",
     name: "Members",
     key: "members",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">person</Icon>,
     route: "/members",
     component: <Members />,
   },
@@ -90,7 +83,7 @@ export const adminRoutes = [
     type: "collapse",
     name: "Admins",
     key: "admins",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">person</Icon>,
     route: "/admins",
     component: <Admins />,
   },
@@ -102,14 +95,6 @@ export const adminRoutes = [
     route: "/billing",
     component: <Billing />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "RTL",
-  //   key: "rtl",
-  //   icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-  //   route: "/rtl",
-  //   component: <RTL />,
-  // },
   {
     type: "collapse",
     name: "Notifications",
@@ -126,14 +111,6 @@ export const adminRoutes = [
     route: "/profile",
     component: <Profile />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Sign In",
-  //   key: "sign-in",
-  //   icon: <Icon fontSize="small">login</Icon>,
-  //   route: "/authentication/sign-in",
-  //   component: <SignIn />,
-  // },
   {
     type: "collapse",
     name: "Sign Up",
@@ -163,28 +140,21 @@ export const userRoutes = [
   }
 ]
 
-function getRole() {
-  let role = ''
-  let token = localStorage.getItem('auth');
-
-    // axios({
-    //   method: "GET",
-    //   url: baseUrl + '/auth/profile',
-    //   headers: {
-    //     Authorization: `Bearer ${token}`
-    //   }
-    // }).then((res) => {
-    //   role = res.data.role;
-    //   console.log(res.data.role, "RUOLE")
-    // }).catch((err) => {
-    //   role = "user"
-    // });
-    
-    // console.log(adminRoutes, "ADMI ROUTES >>>")
-    // if(role === "admin") {
-    //   return adminRoutes;
-    // }
-    // console.log("USER COK >")
-  return userRoutes;
-}
-
+export const guestRoutes = [
+  {
+    type: "collapse",
+    name: "Main Page",
+    key: "main-page",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/main-page",
+    component: <BookDashboard />,
+  },
+  {
+    type: "collapse",
+    name: "Sign In",
+    key: "sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/authentication/sign-in",
+    component: <SignIn />,
+  },
+]

@@ -49,6 +49,7 @@ import {
   setSidenavColor,
   setDarkMode,
 } from "context";
+import { authenticate } from "common/authenticate";
 
 function Configurator() {
   let navigate = useNavigate();
@@ -64,8 +65,8 @@ function Configurator() {
   const [disabled, setDisabled] = useState(false);
   const sidenavColors = ["primary", "dark", "info", "success", "warning", "error"];
 
-  // Use the useEffect hook to change the button state for the sidenav type based on window size.
-  useEffect(() => {
+  const [authenticated, setAuthenticated] = useState(true);
+  useEffect(async() => {
     // A function that sets the disabled state of the buttons for the sidenav type.
     function handleDisabled() {
       return window.innerWidth > 1200 ? setDisabled(false) : setDisabled(true);
@@ -79,7 +80,31 @@ function Configurator() {
 
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleDisabled);
-  }, []);
+  }, [])
+
+
+  if(!authenticated) {
+    return (
+      <div></div>
+    )
+  }
+
+  // Use the useEffect hook to change the button state for the sidenav type based on window size.
+  // useEffect(() => {
+  //   // A function that sets the disabled state of the buttons for the sidenav type.
+  //   function handleDisabled() {
+  //     return window.innerWidth > 1200 ? setDisabled(false) : setDisabled(true);
+  //   }
+
+  //   // The event listener that's calling the handleDisabled function when resizing the window.
+  //   window.addEventListener("resize", handleDisabled);
+
+  //   // Call the handleDisabled function to set the state with the initial value.
+  //   handleDisabled();
+
+  //   // Remove event listener on cleanup
+  //   return () => window.removeEventListener("resize", handleDisabled);
+  // }, []);
 
   const handleCloseConfigurator = () => setOpenConfigurator(dispatch, false);
   const handleTransparentSidenav = () => {
@@ -294,18 +319,24 @@ function Configurator() {
         </MDBox>
         <Divider />
         <MDBox mt={3} mb={2}>
-          <MDButton
-            // component={Link}
-            // href="https://www.creative-tim.com/learning-lab/react/quick-start/material-dashboard/"
-            // target="_blank"
-            rel="noreferrer"
-            color={"error"}
-            // variant="outlined"
-            fullWidth
-            onClick={signOut}
-          >
-            sign out
-          </MDButton>
+          {
+            localStorage.getItem('auth') 
+            ?
+            <MDButton
+              // component={Link}
+              // href="https://www.creative-tim.com/learning-lab/react/quick-start/material-dashboard/"
+              // target="_blank"
+              rel="noreferrer"
+              color={"error"}
+              // variant="outlined"
+              fullWidth
+              onClick={signOut}
+            >
+              sign out
+            </MDButton>
+            :
+            <></>
+          }
         </MDBox>
         <MDBox display="flex" justifyContent="center">
           <GitHubButton

@@ -49,7 +49,8 @@ function DashboardAdmin() {
     let authenticatedData = await authenticate(token);
     if(!authenticatedData) {
       setAuthenticated(false);
-      return navigate("/authentication/sign-in");
+      // return navigate("/authentication/sign-in");
+      return navigate("/book-dashboard");
     }
 
     if(authenticatedData.role === "user") {

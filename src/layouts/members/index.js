@@ -47,6 +47,9 @@ import { baseUrl } from 'common/baseUrl';
 function Members() {
 
   const [members, setMembers] = useState([]);
+  const [filterDDLClass, setFilterDDLClass] = useState([]);
+  const [filterDDLStudy, setFilterDDLStudy] = useState([]);
+  const [filterDDLBatch, setFilterDDLBatch] = useState([]);
   const [nameSearch, setNameSearch] = useState('');
   const [classFilter, setClassFilter] = useState('');
   const [studyFilter, setStudyFilter] = useState('');
@@ -74,9 +77,31 @@ function Members() {
     } catch(error) {
       return;
     }
-
   }
   
+  const getFilterDDL = async () => {
+    try {
+      let url = baseUrl + '/users/filterDDL';
+      let response = await axios({
+        method: "GET",
+        url,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      let classData = response.data.data.classData;
+      let studyData = response.data.data.studyData;
+      let batchData = response.data.data.batchData;
+      setFilterDDLClass(classData);
+      setFilterDDLStudy(studyData);
+      setFilterDDLBatch(batchData);
+      await getMembers();
+      return;
+    } catch(error) {
+      return;
+    }
+  }
+
   const search = () => {
     let filter = Object.assign({}, filterMember);
     filter.name = nameSearch;
@@ -85,12 +110,15 @@ function Members() {
   }
 
   const clear = () => {
+    setClassFilter('');
+    setStudyFilter('');
+    setBatchFilter('');
     setFilterMember({})
     getMembers({});
   }
 
   useEffect(async () => {
-    await getMembers()
+    await getFilterDDL()
   }, [])
 
   const handleChangeClass = (val) => {
@@ -121,7 +149,7 @@ function Members() {
     return (
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <InputLabel id="demo-simple-select-label">Class</InputLabel>
           <Select
             labelId="member-filter-class"
             id="member-filter-class"
@@ -132,9 +160,13 @@ function Members() {
               height: 40
             }}
           >
-            <MenuItem value={"10"}>Ten</MenuItem>
-            <MenuItem value={"20"}>Twenty</MenuItem>
-            <MenuItem value={"C1"}>Thirty</MenuItem>
+            {
+              filterDDLClass.map((val, idx) => {
+                return (
+                  <MenuItem value={val.class} key={idx}>{val.class}</MenuItem>
+                )
+              })
+            }
           </Select>
         </FormControl>
       </Box>
@@ -156,9 +188,13 @@ function Members() {
               height: 40
             }}
           >
-            <MenuItem value={"10"}>Ten</MenuItem>
-            <MenuItem value={"20"}>Twenty</MenuItem>
-            <MenuItem value={"30"}>Thirty</MenuItem>
+            {
+              filterDDLStudy.map((val, idx) => {
+                return (
+                  <MenuItem value={val.study} key={idx}>{val.study}</MenuItem>
+                )
+              })
+            }
           </Select>
         </FormControl>
       </Box>
@@ -180,9 +216,13 @@ function Members() {
               height: 40
             }}
           >
-            <MenuItem value={"10"}>Ten</MenuItem>
-            <MenuItem value={"20"}>Twenty</MenuItem>
-            <MenuItem value={"C1"}>Thirty</MenuItem>
+            {
+              filterDDLBatch.map((val, idx) => {
+                return (
+                  <MenuItem value={val.batch} key={idx}>{val.batch}</MenuItem>
+                )
+              })
+            }
           </Select>
         </FormControl>
       </Box>

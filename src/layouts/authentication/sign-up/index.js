@@ -44,6 +44,7 @@ function Cover() {
   const [nisId, setNis] = useState(null);
   const [study, setStudy] = useState(null);
   const [className, setClassName] = useState(null);
+  const [batch, setBatch] = useState(null);
 
 
   const register = () => {
@@ -53,7 +54,8 @@ function Cover() {
       !password ||
       !nisId ||
       !study ||
-      !className
+      !className ||
+      !batch
     ) {
       swal("Oops!", "Some field are missing!", "warning");
       return
@@ -64,7 +66,8 @@ function Cover() {
       password,
       nisId,
       study,
-      className
+      className,
+      batch
     };
     axios.post(
       baseUrl + '/users/register',
@@ -76,7 +79,9 @@ function Cover() {
       setNis(null)
       setStudy(null)
       setClassName(null)
+      setBatch(null)
       swal("Yes!", "Register success", "success");
+      window.location.reload(false);
       return;
     }).catch((err) => {
       swal("Oops!", "Something went wrong!", "error");
@@ -167,7 +172,19 @@ function Cover() {
                 fullWidth 
               />
             </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
+            <MDBox mb={2}>
+              <MDInput 
+                onChange={(e) => setBatch(e.target.value)} 
+                value={batch}
+                type="text" 
+                label="Angkatan" 
+                variant="standard" 
+                fullWidth 
+              />
+            </MDBox>
+
+
+            {/* <MDBox display="flex" alignItems="center" ml={-1}>
               <Checkbox />
               <MDTypography
                 variant="button"
@@ -187,10 +204,10 @@ function Cover() {
               >
                 Terms and Conditions
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
             <MDBox mt={4} mb={1}>
               <MDButton onClick={() => register()} variant="gradient" color="info" fullWidth>
-                sign in
+                sign up now
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">

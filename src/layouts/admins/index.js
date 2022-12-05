@@ -44,9 +44,12 @@ import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
 
 function Admins() {
-
+  const [showAdd, setShowAdd] = useState(false)
   const [admins, setAdmins] = useState([]);
   const [nameSearch, setNameSearch] = useState('');
+
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   
   const token = localStorage.getItem('auth');
   const { columns, rows } = adminsTableData(admins);
@@ -80,6 +83,35 @@ function Admins() {
   useEffect(async () => {
     await getAdmins()
   }, [])
+
+  const createAdmin = () => {
+    if(
+      !name ||
+      !password
+    ) {
+      swal("Oops!", "Some field are missing!", "warning");
+      return;
+    }
+
+    let payload = {
+      name,
+      password
+    };
+    axios({
+      method: "POST",
+      url: baseUrl + '/admin/register',
+      data: payload,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      swal("Yes!", "Create admin successfully", "success");
+      window.location.reload(false);
+    }).catch((err) => {
+      swal("Oops!", "Something went wrong!", "error");
+      return;
+    })
+  }
   
   if(!admins) {
     return (
@@ -94,6 +126,83 @@ function Admins() {
       <DashboardNavbar />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
+
+        {
+            showAdd
+            ?
+            <Grid item xs={6}>
+            <Card>
+              <MDBox
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                mx={2}
+                mt={-3}
+                textAlign="center"
+                id="create_new_book"
+              >
+                <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+                  Create new admin
+                </MDTypography>
+                <MDTypography display="block" variant="button" color="white" my={1}>
+                  Enter new admin data
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={4} pb={3} px={3}>
+                <MDBox component="form" role="form">
+  
+                  <MDBox mb={2}>
+                    <MDInput 
+                      type="text" 
+                      label="Name" 
+                      variant="standard" 
+                      fullWidth 
+                      // value={username}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="password" 
+                      label="Password" 
+                      variant="standard" 
+                      fullWidth 
+                      // value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </MDBox>
+
+                  <MDBox mt={4} mb={1}>
+                    <Grid container>
+                      <Grid item xs={6} p={1}>
+                        <MDButton 
+                          variant="gradient" 
+                          color="info" 
+                          fullWidth
+                          onClick={createAdmin}
+                        >
+                          create
+                        </MDButton>
+                      </Grid>
+                      <Grid item xs={6} p={1}>
+                        <MDButton 
+                          variant="gradient" 
+                          color="error" 
+                          fullWidth
+                          onClick={() => setShowAdd(false)}
+                        >
+                          cancel
+                        </MDButton>
+                      </Grid>
+                    </Grid>
+                  </MDBox>
+                </MDBox>
+              </MDBox>
+            </Card>
+            </Grid>
+            :
+            <></>
+          }
 
           <Grid item xs={12}>
             <Card>
@@ -134,6 +243,21 @@ function Admins() {
                     >
                       clear
                     </MDButton>
+                  </Grid>
+
+                  <Grid item ml={1}>
+                    {
+                      showAdd
+                      ?
+                      <></>
+                      :
+                      <MDButton
+                        color="info"
+                        onClick={() => setShowAdd(true)}
+                      >
+                        add
+                      </MDButton>
+                    }
                   </Grid>
 
                 </Grid>

@@ -150,7 +150,7 @@ export const userRoutes = [
   {
     type: "collapse",
     name: "User Borrowings",
-    key: "userborrowings",
+    key: "user-borrowings",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/user/borrowings",
     component: <UserBorrowings />,
@@ -158,7 +158,7 @@ export const userRoutes = [
   {
     type: "collapse",
     name: "User Books",
-    key: "userbooks",
+    key: "user-books",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/user/books",
     component: <UserBooks />,

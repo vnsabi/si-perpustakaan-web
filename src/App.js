@@ -164,20 +164,6 @@ export default function App() {
     setRole(roleUsed);
   }, []);
 
-  // const handleRoutes = () => {
-  //   routes.map((route) => {
-  //     if (route.collapse) {
-  //       return getRoutes(route.collapse);
-  //     }
-
-  //     if (route.route) {
-  //       return <Route exact path={route.route} element={route.component} key={route.key} />;
-  //     }
-
-  //     return null;
-  //   });
-  // }
-
   const configsButton = (
     <MDBox
       display="flex"
@@ -231,8 +217,8 @@ export default function App() {
           <Route exact path={'/members'} element={<Members />} key={"members"} />        
           <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
           
-          <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"userborrowings"} />
-          <Route exact path={'/user/books'} element={<UserBooks />} key={"userbooks"} />
+          <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"user-borrowings"} />
+          <Route exact path={'/user/books'} element={<UserBooks />} key={"user-books"} />
 
           <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
@@ -295,8 +281,8 @@ export default function App() {
         <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
 
         
-        <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"userBorrowings"} />
-        <Route exact path={'/user/books'} element={<UserBooks />} key={"userBooks"} />
+        <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"user-borrowings"} />
+        <Route exact path={'/user/books'} element={<UserBooks />} key={"user-books"} />
         
         <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />

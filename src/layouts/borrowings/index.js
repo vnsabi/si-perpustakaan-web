@@ -37,7 +37,6 @@ import Autocomplete from '@mui/material/Autocomplete';
 
 // Data
 import borrowingsTableData from "layouts/borrowings/data/borrowingsTableData";
-import MDInput from "components/MDInput";
 import swal from 'sweetalert';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';

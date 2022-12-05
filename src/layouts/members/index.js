@@ -14,6 +14,8 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -43,9 +45,31 @@ import MDInput from "components/MDInput";
 import swal from 'sweetalert';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
+import { authenticate } from 'common/authenticate';
 
 function Members() {
 
+  // AUTH
+  let navigate = useNavigate();
+  const token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(false);
+
+
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+
+    if(authenticatedData.role === "user") {
+      return navigate("/dashboard");
+    }
+
+    setAuthenticated(true);
+    await getFilterDDL()
+  }, [])
+
+  // MEMBERS
   const [members, setMembers] = useState([]);
   const [filterDDLClass, setFilterDDLClass] = useState([]);
   const [filterDDLStudy, setFilterDDLStudy] = useState([]);
@@ -56,7 +80,6 @@ function Members() {
   const [batchFilter, setBatchFilter] = useState('');
   const [filterMember, setFilterMember] = useState({});
   
-  const token = localStorage.getItem('auth');
   const { columns, rows } = membersTableData(members);
   const { columns: pColumns, rows: pRows } = projectsTableData();
 
@@ -116,10 +139,6 @@ function Members() {
     setFilterMember({})
     getMembers({});
   }
-
-  useEffect(async () => {
-    await getFilterDDL()
-  }, [])
 
   const handleChangeClass = (val) => {
     setClassFilter(val);
@@ -229,7 +248,7 @@ function Members() {
     )
   }
   
-  if(!members) {
+  if(!members || !authenticated) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -45,8 +46,31 @@ import SelectedBookList from './list';
 // Date Picker
 import dayjs from 'dayjs';
 import MaterialUIPickers from './datePicker';
+import { authenticate } from 'common/authenticate';
 
 function Borrowings() { 
+
+  // AUTH
+  let navigate = useNavigate();
+  const token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(false);
+
+
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+
+    if(authenticatedData.role === "user") {
+      return navigate("/dashboard");
+    }
+
+    setAuthenticated(true);
+    await getBorrowings();
+  }, [])
+
+  // BORROWINGS
   const [showAdd, setShowAdd] = useState(false);
 
   const [borrowings, setBorrowings] = useState([]);
@@ -60,8 +84,6 @@ function Borrowings() {
   const [expiredDate, setExpiredDate] = useState(null);
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [mappingBooks, setMappingBooks] = useState([]);
-
-  const token = localStorage.getItem('auth');
   const { columns, rows } = borrowingsTableData(borrowings);
 
   const getBorrowings = async () => {
@@ -121,14 +143,6 @@ function Borrowings() {
       return;
     }
   }
-  
-  const search = () => {
-
-  }
-
-  useEffect(async () => {
-    await getBorrowings();
-  }, [])
 
   const create = () => {
     if(
@@ -252,7 +266,10 @@ function Borrowings() {
     setSelectedBooks(filterNotDeleted);
   }
 
-  if(!mappingBooks) {
+  if(
+    !mappingBooks ||
+    !authenticated  
+  ) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

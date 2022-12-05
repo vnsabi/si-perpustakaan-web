@@ -41,8 +41,12 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import { authenticate } from 'common/authenticate';
 
 function Dashboard() {
+
+  // AUTH
   let navigate = useNavigate();
   const [authenticated, setAuthenticated] = useState(true);
+
+
   const { sales, tasks } = reportsLineChartData;
 
   useEffect(async() => {

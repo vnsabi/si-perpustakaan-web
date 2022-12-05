@@ -14,6 +14,8 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -30,11 +32,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar"
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 // Data
 import adminsTableData from "layouts/admins/data/adminsTableData";
@@ -42,8 +39,31 @@ import MDInput from "components/MDInput";
 import swal from 'sweetalert';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
+import { authenticate } from 'common/authenticate';
 
 function Admins() {
+
+  // AUTH
+  let navigate = useNavigate();
+  const token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(false);
+
+
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+
+    if(authenticatedData.role === "user") {
+      return navigate("/dashboard");
+    }
+
+    setAuthenticated(true);
+    await getAdmins();
+  }, [])
+
+  // ADMINS
   const [showAdd, setShowAdd] = useState(false)
   const [admins, setAdmins] = useState([]);
   const [nameSearch, setNameSearch] = useState('');
@@ -51,7 +71,6 @@ function Admins() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   
-  const token = localStorage.getItem('auth');
   const { columns, rows } = adminsTableData(admins);
 
   const getAdmins = async (name) => {
@@ -79,10 +98,6 @@ function Admins() {
   const clear = () => {
     getAdmins();
   }
-
-  useEffect(async () => {
-    await getAdmins()
-  }, [])
 
   const createAdmin = () => {
     if(
@@ -113,7 +128,7 @@ function Admins() {
     })
   }
   
-  if(!admins) {
+  if(!admins || !authenticate) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

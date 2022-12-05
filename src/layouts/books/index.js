@@ -14,6 +14,8 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -37,8 +39,31 @@ import booksTableData from "layouts/books/data/booksTableData";
 import swal from 'sweetalert';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
+import { authenticate } from 'common/authenticate';
 
 function Books() {
+
+  // AUTH
+  let navigate = useNavigate();
+  const token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+
+    if(authenticatedData.role === "user") {
+      return navigate("/dashboard");
+    }
+
+    setAuthenticated(true);
+    await getBooks()
+  }, [])
+
+
+  // BOOKS
   const [showAdd, setShowAdd] = useState(false)
   const [title, setTite] = useState(null);
   const [code, setCode] = useState(null);
@@ -46,8 +71,7 @@ function Books() {
 
   const [books, setBooks] = useState([]);
   const [titleSearch, setTitleSearch] = useState('');
-  
-  const token = localStorage.getItem('auth');
+
   const { columns, rows } = booksTableData(books);
 
   const getBooks = async (titleSearchVal) => {
@@ -76,10 +100,6 @@ function Books() {
   const search = () => {
     getBooks(titleSearch);
   }
-
-  useEffect(async () => {
-    await getBooks()
-  }, [])
 
   const create = () => {
     if(
@@ -114,7 +134,10 @@ function Books() {
     })
   }
   
-  if(!books) {
+  if(
+    !books || 
+    !authenticated
+  ) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

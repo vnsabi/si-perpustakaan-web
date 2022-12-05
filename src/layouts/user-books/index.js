@@ -14,6 +14,8 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -34,20 +36,35 @@ import MDInput from "components/MDInput";
 
 // Data
 import booksTableData from "layouts/user-books/data/booksTableData";
-import swal from 'sweetalert';
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
+import { authenticate } from 'common/authenticate';
 
 function UserBooks() {
-  const [showAdd, setShowAdd] = useState(false)
-  const [title, setTite] = useState(null);
-  const [code, setCode] = useState(null);
-  const [qty, setQty] = useState(0);
 
+  // AUTH
+  let navigate = useNavigate();
+  const token = localStorage.getItem('auth');
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+
+    if(authenticatedData.role === "admin") {
+      return navigate("/dashboard-admin");
+    }
+
+    setAuthenticated(true);
+    await getBooks();
+  }, [])
+
+  
+  // BOOKS
   const [books, setBooks] = useState([]);
   const [titleSearch, setTitleSearch] = useState('');
-  
-  const token = localStorage.getItem('auth');
   const { columns, rows } = booksTableData(books);
 
   const getBooks = async (titleSearchVal) => {
@@ -77,44 +94,10 @@ function UserBooks() {
     getBooks(titleSearch);
   }
 
-  useEffect(async () => {
-    await getBooks()
-  }, [])
-
-  const create = () => {
-    if(
-      !title ||
-      !code ||
-      !qty
+  if(
+    !books || 
+    !authenticated
     ) {
-      swal("Oops!", "Some field are missing!", "warning");
-      return;
-    }
-    let payload = {
-      title,
-      code,
-      quantity: qty
-    };
-    axios({
-      method: "POST",
-      url: baseUrl + '/books/create',
-      data: payload,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      swal("Yes!", "Create book successfully", "success");
-      window.location.reload(false);
-      return;
-    })
-    .catch((err) => {
-      swal("Oops!", "Something went wrong!", "error");
-      return
-    })
-  }
-  
-  if(!books) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

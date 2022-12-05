@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -36,10 +37,27 @@ import { baseUrl } from 'common/baseUrl';
 import { authenticate } from 'common/authenticate';
 function UserBorrowings() { 
 
-  const [authenticated, setAuthenticated] = useState(false);
+  // AUTH
+  let navigate = useNavigate();
   const [borrowings, setBorrowings] = useState([]);
-
   const token = localStorage.getItem('auth');
+
+  const [authenticated, setAuthenticated] = useState(false);
+  useEffect(async () => {
+    let authenticatedData = await authenticate(token);
+    if(!authenticatedData) {
+      return navigate("/main-page");
+    }
+    console.log(authenticatedData.role, "AUTH DATA >>")
+    if(authenticatedData.role === "admin") {
+      return navigate("/dashboard-admin");
+    }
+
+    setAuthenticated(true);
+    await getBorrowings(authenticatedData.id);
+  }, [])
+
+  // BORROWINGS
   const { columns, rows } = borrowingsTableData(borrowings);
 
   const getBorrowings = async (userId) => {
@@ -59,20 +77,6 @@ function UserBorrowings() {
       return;
     }
   }
-  
-  useEffect(async () => {
-    let authenticatedData = await authenticate(token);
-    if(!authenticatedData) {
-      return navigate("/main-page");
-    }
-
-    if(authenticatedData.role === "admin") {
-      return navigate("/dashboard-admin");
-    }
-
-    setAuthenticated(true);
-    await getBorrowings(authenticatedData.id);
-  }, [])
 
   if(
     !borrowings.length &&

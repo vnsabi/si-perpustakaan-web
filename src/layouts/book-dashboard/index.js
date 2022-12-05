@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -36,9 +37,12 @@ import authorsTableData from "layouts/book-dashboard/data/booksTableData";
 import MDInput from "components/MDInput";
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
+import { authenticate } from 'common/authenticate';
 
 function BookDashboard() {
 
+  let navigate = useNavigate();
+  const [authenticated, setAuthenticated] = useState(true);
   const [books, setBooks] = useState([]);
   const [titleSearch, setTitleSearch] = useState('');
   
@@ -70,10 +74,25 @@ function BookDashboard() {
   }
 
   useEffect(async () => {
-    await getBooks()
+    let authenticatedData = await authenticate(token);
+    if(authenticatedData) {
+      setAuthenticated(true);
+      if(authenticatedData.role === "user") {
+        return navigate("/dashboard");
+      }
+
+      if(authenticatedData.role === "admin") {
+        return navigate("/dashboard-admin");
+      }
+
+    } else {
+      setAuthenticated(false);
+      await getBooks()
+    }
+
   }, [])
   
-  if(!books) {
+  if(!books || authenticated) {
     return (
       <DashboardLayout>
         <DashboardNavbar />

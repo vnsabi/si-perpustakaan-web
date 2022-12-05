@@ -69,6 +69,8 @@ import Books from "layouts/books";
 import Members from "layouts/members";
 import BookDashboard from "layouts/book-dashboard";
 import Borrowings from "layouts/borrowings";
+import UserBorrowings from "layouts/user-borrowings";
+import UserBooks from "layouts/user-books";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -221,12 +223,17 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+          
           <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
           <Route exact path={'/tables'} element={<Tables />} key={"tables"} />      
           <Route exact path={'/borrowings'} element={<Borrowings />} key={"borrowings"} />         
           <Route exact path={'/books'} element={<Books />} key={"books"} />        
           <Route exact path={'/members'} element={<Members />} key={"members"} />        
           <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
+          
+          <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"userborrowings"} />
+          <Route exact path={'/user/books'} element={<UserBooks />} key={"userbooks"} />
+
           <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
           <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
           <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
@@ -279,12 +286,18 @@ export default function App() {
       <Routes>
         {/* {handleRoutes} */}
         <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
+
         <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
         <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
         <Route exact path={'/borrowings'} element={<Borrowings />} key={"borrowings"} />        
         <Route exact path={'/books'} element={<Books />} key={"books"} />        
         <Route exact path={'/members'} element={<Members />} key={"members"} />        
         <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
+
+        
+        <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"userBorrowings"} />
+        <Route exact path={'/user/books'} element={<UserBooks />} key={"userBooks"} />
+        
         <Route exact path={'/billing'} element={<Billing />} key={"billing"} />
         <Route exact path={'/rtl'} element={<RTL />} key={"rtl"} />
         <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />

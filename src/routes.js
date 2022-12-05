@@ -43,8 +43,6 @@ import RTL from "layouts/rtl";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
-import SignUpAdmin from "layouts/authentication/sign-up-admin";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -54,6 +52,8 @@ import Books from "layouts/books";
 import Members from "layouts/members";
 import BookDashboard from "layouts/book-dashboard";
 import Borrowings from "layouts/borrowings";
+import UserBorrowings from "layouts/user-borrowings";
+import UserBooks from "layouts/user-books";
 
 export const adminRoutes = [
   {
@@ -149,19 +149,19 @@ export const userRoutes = [
   },
   {
     type: "collapse",
-    name: "Borrowings",
-    key: "borrowings",
+    name: "User Borrowings",
+    key: "userborrowings",
     icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/borrowings",
-    component: <Borrowings />,
+    route: "/user/borrowings",
+    component: <UserBorrowings />,
   },
   {
     type: "collapse",
-    name: "Books",
-    key: "books",
+    name: "User Books",
+    key: "userbooks",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/books",
-    component: <Books />,
+    route: "/user/books",
+    component: <UserBooks />,
   },
 ]
 

@@ -53,6 +53,7 @@ import Admins from "layouts/admins";
 import Books from "layouts/books";
 import Members from "layouts/members";
 import BookDashboard from "layouts/book-dashboard";
+import Borrowings from "layouts/borrowings";
 
 export const adminRoutes = [
   {
@@ -62,6 +63,14 @@ export const adminRoutes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard-admin",
     component: <DashboardAdmin />,
+  },
+  {
+    type: "collapse",
+    name: "Borrowings",
+    key: "borrowings",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/borrowings",
+    component: <Borrowings />,
   },
   {
     type: "collapse",

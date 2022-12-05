@@ -68,6 +68,7 @@ import Admins from "layouts/admins";
 import Books from "layouts/books";
 import Members from "layouts/members";
 import BookDashboard from "layouts/book-dashboard";
+import Borrowings from "layouts/borrowings";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -221,7 +222,8 @@ export default function App() {
         <Routes>
           <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
           <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
-          <Route exact path={'/tables'} element={<Tables />} key={"tables"} />       
+          <Route exact path={'/tables'} element={<Tables />} key={"tables"} />      
+          <Route exact path={'/borrowings'} element={<Borrowings />} key={"borrowings"} />         
           <Route exact path={'/books'} element={<Books />} key={"books"} />        
           <Route exact path={'/members'} element={<Members />} key={"members"} />        
           <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
@@ -279,6 +281,7 @@ export default function App() {
         <Route exact path={'/dashboard'} element={<Dashboard />} key={"dashboard"} />
         <Route exact path={'/dashboard-admin'} element={<DashboardAdmin />} key={"dashboard-admin"} />
         <Route exact path={'/tables'} element={<Tables />} key={"tables"} />        
+        <Route exact path={'/borrowings'} element={<Borrowings />} key={"borrowings"} />        
         <Route exact path={'/books'} element={<Books />} key={"books"} />        
         <Route exact path={'/members'} element={<Members />} key={"members"} />        
         <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        

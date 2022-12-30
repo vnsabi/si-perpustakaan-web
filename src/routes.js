@@ -54,6 +54,8 @@ import BookDashboard from "layouts/book-dashboard";
 import Borrowings from "layouts/borrowings";
 import UserBorrowings from "layouts/user-borrowings";
 import UserBooks from "layouts/user-books";
+import VisitForm from "layouts/visit-form";
+import VisitFormAdmin from "layouts/visit-form-admin";
 
 export const adminRoutes = [
   {
@@ -95,6 +97,14 @@ export const adminRoutes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/admins",
     component: <Admins />,
+  },
+  {
+    type: "collapse",
+    name: "Visit Form",
+    key: "visit-form-admin",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/visit-form-admin",
+    component: <VisitFormAdmin />,
   },
   // {
   //   type: "collapse",
@@ -173,6 +183,14 @@ export const guestRoutes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/main-page",
     component: <BookDashboard />,
+  },
+  {
+    type: "collapse",
+    name: "Visit Form",
+    key: "visit-form",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/visit-form",
+    component: <VisitForm />,
   },
   {
     type: "collapse",

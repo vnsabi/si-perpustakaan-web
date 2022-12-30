@@ -71,6 +71,8 @@ import BookDashboard from "layouts/book-dashboard";
 import Borrowings from "layouts/borrowings";
 import UserBorrowings from "layouts/user-borrowings";
 import UserBooks from "layouts/user-books";
+import VisitForm from "layouts/visit-form";
+import VisitFormAdmin from "layouts/visit-form-admin";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -216,6 +218,7 @@ export default function App() {
           <Route exact path={'/books'} element={<Books />} key={"books"} />        
           <Route exact path={'/members'} element={<Members />} key={"members"} />        
           <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
+          <Route exact path={'/visit-form-admin'} element={<VisitFormAdmin />} key={"visit-form-admin"} />
           
           <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"user-borrowings"} />
           <Route exact path={'/user/books'} element={<UserBooks />} key={"user-books"} />
@@ -225,6 +228,7 @@ export default function App() {
           <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
           <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
           <Route exact path={'/main-page'} element={<BookDashboard />} key={"main-page"} />
+          <Route exact path={'/visit-form'} element={<VisitForm />} key={"visit-form"} />
           <Route 
             exact 
             path={'/authentication/sign-in'} 
@@ -279,6 +283,7 @@ export default function App() {
         <Route exact path={'/books'} element={<Books />} key={"books"} />        
         <Route exact path={'/members'} element={<Members />} key={"members"} />        
         <Route exact path={'/admins'} element={<Admins />} key={"admins"} />        
+        <Route exact path={'/visit-form-admin'} element={<VisitFormAdmin />} key={"visit-form-admin"} />
 
         
         <Route exact path={'/user/borrowings'} element={<UserBorrowings />} key={"user-borrowings"} />
@@ -289,6 +294,7 @@ export default function App() {
         <Route exact path={'/notifications'} element={<Notifications />} key={"notifications"} />
         <Route exact path={'/profile'} element={<Profile />} key={"profile"} />
         <Route exact path={'/main-page'} element={<BookDashboard />} key={"main-page"} />
+        <Route exact path={'/visit-form'} element={<VisitForm />} key={"visit-form"} />
 
         <Route 
           exact 

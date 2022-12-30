@@ -28,6 +28,7 @@ import { baseUrl } from 'common/baseUrl';
 import { dateFormatter } from 'common/dateFormat';
 import MDInput from "components/MDInput";
 import swal from 'sweetalert';
+import DownloadSide from './downloadSide';
 
 export default function data(books) {
   const [editedBookId, setEditedBookId] = useState(0);
@@ -254,6 +255,10 @@ export default function data(books) {
 
           deleteBook={deleteBook}
         />,
+
+        download: <DownloadSide 
+          bookId={val.id}
+        />
       }
     })
   }
@@ -261,11 +266,12 @@ export default function data(books) {
   if(!books.length) {
     return {
       columns: [
-        { Header: "title", accessor: "title", width: "30%", align: "left" },
+        { Header: "title", accessor: "title", width: "15%", align: "left" },
         { Header: "code", accessor: "code", align: "center" },
         { Header: "qty", accessor: "qty", align: "center" },
         { Header: "created at", accessor: "createdDate", align: "center" },
-        { Header: "action", accessor: "action", align: "center" },
+        { Header: "action", accessor: "action", align: "center", },
+        { Header: "download", accessor: "download", align: "center", },
       ],
   
       rows: [],
@@ -274,11 +280,12 @@ export default function data(books) {
 
   return {
     columns: [
-      { Header: "title", accessor: "title", width: "30%", align: "left" },
+      { Header: "title", accessor: "title", width: "15%", align: "left" },
       { Header: "code", accessor: "code", align: "center" },
       { Header: "qty", accessor: "qty", align: "center" },
       { Header: "created at", accessor: "createdDate", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "action", accessor: "action", align: "center", },
+      { Header: "download", accessor: "download", align: "center", },
     ],
 
     rows: renderRows(),

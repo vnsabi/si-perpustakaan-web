@@ -68,6 +68,8 @@ function Books() {
   const [title, setTite] = useState(null);
   const [code, setCode] = useState(null);
   const [qty, setQty] = useState(0);
+  const [ebook, setEbook] = useState(null);
+  const [ebookName, setEbookName] = useState('');
 
   const [books, setBooks] = useState([]);
   const [titleSearch, setTitleSearch] = useState('');
@@ -124,6 +126,13 @@ function Books() {
       }
     })
     .then((res) => {
+      if(ebook) {
+        let response = res.data.data;
+        let bookId = response.id;
+        upload(bookId);
+        return;
+      }
+      
       swal("Yes!", "Create book successfully", "success");
       window.location.reload(false);
       return;
@@ -133,7 +142,35 @@ function Books() {
       return
     })
   }
+
+  const upload = (bookId) => {
+    const formData = new FormData();
+    formData.append('bookId', bookId);
+    formData.append('file', ebook);
+    axios({
+      method: "POST",
+      url: baseUrl + '/books/upload',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((res) => {
+      swal("Yes!", "Create book with file successfully", "success");
+      window.location.reload(false);
+      return;
+    })
+    .catch((err) => {
+      swal("Oops!", "Something went wrong when upload!", "error");
+      return
+    })
+  }
   
+  const handleUploadedEbook = (file) => {
+    setEbook(file);
+    setEbookName(file.name);
+  }
+
   if(
     !books || 
     !authenticated
@@ -204,6 +241,31 @@ function Books() {
                       onChange={(e) => setQty(Number(e.target.value))}
                     />
                   </MDBox>
+
+                  <MDBox mt={4} mb={1}>
+                    <Grid container>
+                      <Grid item xs={6} p={1}>
+                        <MDButton
+                          variant="gradient" 
+                          color="info" 
+                          component="label"
+                        >
+                          Upload E-Book
+                          <input
+                            type="file"
+                            hidden
+                            onChange={(e) => handleUploadedEbook(e.target.files[0])}
+                          />
+                        </MDButton>
+                      </Grid>
+                      <Grid item xs={6} p={1}>
+                        <MDTypography display="block" variant="button" my={1}>
+                          {ebookName}
+                        </MDTypography>
+                      </Grid>
+                    </Grid>
+                  </MDBox>
+
                   <MDBox mt={4} mb={1}>
                     <Grid container>
                       <Grid item xs={6} p={1}>

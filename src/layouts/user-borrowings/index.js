@@ -31,7 +31,7 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import borrowingsTableData from "layouts/borrowings/data/borrowingsTableData";
+import borrowingsTableData from "layouts/user-borrowings/data/borrowingsTableData";
 import axios from 'axios';
 import { baseUrl } from 'common/baseUrl';
 import { authenticate } from 'common/authenticate';

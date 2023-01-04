@@ -4,7 +4,7 @@ import MDTypography from "components/MDTypography";
 
 // Images
 import { dateFormatter } from 'common/dateFormat';
-import BorrowingsBookModal from "./showBookModal";
+import UserBorrowingsBookModal from "./showBookModal";
 
 export default function data(borrowings) {
   function Text({ 
@@ -41,7 +41,7 @@ export default function data(borrowings) {
             {dateFormatter(val.createdAt)}
           </MDTypography>
         ),
-        action: <BorrowingsBookModal 
+        action: <UserBorrowingsBookModal 
           booksData={val.booksData}
         />,
       }

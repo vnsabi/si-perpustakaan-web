@@ -18,7 +18,7 @@ const style = {
   p: 4,
 };
 
-export default function BorrowingsBookModal({
+export default function UserBorrowingsBookModal({
   booksData
 }) {
   const [open, setOpen] = React.useState(false);
@@ -60,11 +60,13 @@ export default function BorrowingsBookModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Borrowing Books
           </Typography>
 
           {renderBooks()}
+
 
         </Box>
       </Modal>

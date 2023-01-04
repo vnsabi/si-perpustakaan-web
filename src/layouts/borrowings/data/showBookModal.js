@@ -5,6 +5,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
+import { Grid } from '@mui/material';
+import axios from 'axios';
+import { baseUrl } from 'common/baseUrl';
+import swal from 'sweetalert';
 
 const style = {
   position: 'absolute',
@@ -19,7 +24,8 @@ const style = {
 };
 
 export default function BorrowingsBookModal({
-  booksData
+  booksData,
+  borrowingId
 }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -35,6 +41,7 @@ export default function BorrowingsBookModal({
           justifyContent="center"
           marginTop={2}
           marginBottom={2}
+          key={val.id}
         >
           <MDTypography variant="button" fontWeight="medium">
             {val.title} 
@@ -50,6 +57,27 @@ export default function BorrowingsBookModal({
     })
   }
 
+  const deleteBorrowing = () => {
+    const token = localStorage.getItem('auth');
+    axios({
+      url: baseUrl + '/borrowings/delete',
+      method: "DELETE",
+      data: {
+        borrowingId
+      },
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((res) => {
+      swal("Yes!", "Login successfully", "success");
+      window.location.reload(false);
+    })
+    .catch((err) => {
+      swal("Oops!", "Something went wrong!", "error");
+    })
+  }
+
   return (
     <div>
       <Button onClick={handleOpen}>SHOW DETAIL</Button>
@@ -60,11 +88,27 @@ export default function BorrowingsBookModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Borrowing Books
-          </Typography>
+
+          <Grid container spacing={10}>
+            <Grid item xs={6}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Borrowing Books
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <MDButton 
+                variant="gradient" 
+                color="error" 
+                size="small"
+                onClick={() => deleteBorrowing()}
+              >
+                Delete
+              </MDButton>
+            </Grid>
+          </Grid>
 
           {renderBooks()}
+
 
         </Box>
       </Modal>

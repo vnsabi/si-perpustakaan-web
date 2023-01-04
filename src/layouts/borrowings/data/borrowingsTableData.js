@@ -43,6 +43,7 @@ export default function data(borrowings) {
         ),
         action: <BorrowingsBookModal 
           booksData={val.booksData}
+          borrowingId={val.id}
         />,
       }
     })

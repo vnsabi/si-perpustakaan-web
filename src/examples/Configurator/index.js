@@ -170,12 +170,12 @@ function Configurator() {
         pb={0.5}
         px={3}
       >
-        <MDBox>
+        {/* <MDBox>
           <MDTypography variant="h5">Material UI Configurator</MDTypography>
           <MDTypography variant="body2" color="text">
             See our dashboard options.
           </MDTypography>
-        </MDBox>
+        </MDBox> */}
 
         <Icon
           sx={({ typography: { size }, palette: { dark, white } }) => ({
@@ -195,7 +195,7 @@ function Configurator() {
       <Divider />
 
       <MDBox pt={0.5} pb={3} px={3}>
-        <MDBox>
+        {/* <MDBox>
           <MDTypography variant="h6">Sidenav Colors</MDTypography>
 
           <MDBox mb={0.5}>
@@ -239,9 +239,9 @@ function Configurator() {
               />
             ))}
           </MDBox>
-        </MDBox>
+        </MDBox> */}
 
-        <MDBox mt={3} lineHeight={1}>
+        {/* <MDBox mt={3} lineHeight={1}>
           <MDTypography variant="h6">Sidenav Type</MDTypography>
           <MDTypography variant="button" color="text">
             Choose between different sidenav types.
@@ -299,8 +299,9 @@ function Configurator() {
               White
             </MDButton>
           </MDBox>
-        </MDBox>
-        <MDBox
+        </MDBox> */}
+
+        {/* <MDBox
           display="flex"
           justifyContent="space-between"
           alignItems="center"
@@ -310,14 +311,15 @@ function Configurator() {
           <MDTypography variant="h6">Navbar Fixed</MDTypography>
 
           <Switch checked={fixedNavbar} onChange={handleFixedNavbar} />
-        </MDBox>
-        <Divider />
-        <MDBox display="flex" justifyContent="space-between" alignItems="center" lineHeight={1}>
+        </MDBox> */}
+
+        {/* <Divider /> */}
+        {/* <MDBox display="flex" justifyContent="space-between" alignItems="center" lineHeight={1}>
           <MDTypography variant="h6">Light / Dark</MDTypography>
 
           <Switch checked={darkMode} onChange={handleDarkMode} />
-        </MDBox>
-        <Divider />
+        </MDBox> */}
+        {/* <Divider /> */}
         <MDBox mt={3} mb={2}>
           {
             localStorage.getItem('auth') 
@@ -338,7 +340,8 @@ function Configurator() {
             <></>
           }
         </MDBox>
-        <MDBox display="flex" justifyContent="center">
+
+        {/* <MDBox display="flex" justifyContent="center">
           <GitHubButton
             href="https://github.com/creativetimofficial/material-dashboard-react"
             data-icon="octicon-star"
@@ -348,8 +351,8 @@ function Configurator() {
           >
             Star
           </GitHubButton>
-        </MDBox>
-        <MDBox mt={2} textAlign="center">
+        </MDBox> */}
+        {/* <MDBox mt={2} textAlign="center">
           <MDBox mb={0.5}>
             <MDTypography variant="h6">Thank you for sharing!</MDTypography>
           </MDBox>
@@ -378,7 +381,7 @@ function Configurator() {
               &nbsp; Share
             </MDButton>
           </MDBox>
-        </MDBox>
+        </MDBox> */}
       </MDBox>
     </ConfiguratorRoot>
   );

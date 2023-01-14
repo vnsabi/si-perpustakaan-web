@@ -68,11 +68,15 @@ export default function data(books) {
         qty: <Qty 
           value={val.quantity} 
         />,
-        createdDate: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {dateFormatter(val.createdAt)}
-          </MDTypography>
-        ),
+        publisher: <Qty 
+          value={val.publisher}
+        />,
+        author: <Qty 
+          value={val.author}
+        />,
+        publishYear: <Qty 
+          value={val.publishYear}
+        />,
       }
     })
   }
@@ -82,7 +86,9 @@ export default function data(books) {
       columns: [
         { Header: "title", accessor: "title", width: "30%", align: "left" },
         { Header: "qty", accessor: "qty", align: "center" },
-        { Header: "created at", accessor: "createdDate", align: "center" },
+        { Header: "publisher", accessor: "publisher", align: "center" },
+        { Header: "author", accessor: "author", align: "center" },
+        { Header: "publish year", accessor: "publishYear", align: "center" },
       ],
   
       rows: [],
@@ -93,7 +99,9 @@ export default function data(books) {
     columns: [
       { Header: "title", accessor: "title", width: "30%", align: "left" },
       { Header: "qty", accessor: "qty", align: "center" },
-      { Header: "created at", accessor: "createdDate", align: "center" },
+      { Header: "publisher", accessor: "publisher", align: "center" },
+      { Header: "author", accessor: "author", align: "center" },
+      { Header: "publish year", accessor: "publishYear", align: "center" },
     ],
 
     rows: renderRows(),

@@ -186,19 +186,13 @@ export default function data(books) {
           editedBookId={editedBookId}
         />,
         publisher: <Qty 
-          value={val.publisher} 
-          bookId={val.id}
-          editedBookId={editedBookId}
+          value={val.publisher}
         />,
         author: <Qty 
-          value={val.author} 
-          bookId={val.id}
-          editedBookId={editedBookId}
+          value={val.author}
         />,
         publishYear: <Qty 
-          value={val.publishYear} 
-          bookId={val.id}
-          editedBookId={editedBookId}
+          value={val.publishYear}
         />,
         // function: <Job title="Manager" description="Organization" />,
         // status: (

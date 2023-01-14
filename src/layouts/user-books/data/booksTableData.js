@@ -76,11 +76,21 @@ export default function data(books) {
         qty: <Qty 
           value={val.quantity}
         />,
-        createdDate: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {dateFormatter(val.createdAt)}
-          </MDTypography>
-        ),
+        publisher: <Qty 
+          value={val.publisher} 
+          bookId={val.id}
+          editedBookId={editedBookId}
+        />,
+        author: <Qty 
+          value={val.author} 
+          bookId={val.id}
+          editedBookId={editedBookId}
+        />,
+        publishYear: <Qty 
+          value={val.publishYear} 
+          bookId={val.id}
+          editedBookId={editedBookId}
+        />,
 
         download: <DownloadSide 
           bookId={val.id}
@@ -94,7 +104,9 @@ export default function data(books) {
       columns: [
         { Header: "title", accessor: "title", width: "30%", align: "left" },
         { Header: "qty", accessor: "qty", align: "center" },
-        { Header: "created at", accessor: "createdDate", align: "center" },
+        { Header: "publisher", accessor: "publisher", align: "center" },
+        { Header: "author", accessor: "author", align: "center" },
+        { Header: "publish year", accessor: "publishYear", align: "center" },
         { Header: "download", accessor: "download", align: "center", },
       ],
   
@@ -106,7 +118,9 @@ export default function data(books) {
     columns: [
       { Header: "title", accessor: "title", width: "30%", align: "left" },
       { Header: "qty", accessor: "qty", align: "center" },
-      { Header: "created at", accessor: "createdDate", align: "center" },
+      { Header: "publisher", accessor: "publisher", align: "center" },
+      { Header: "author", accessor: "author", align: "center" },
+      { Header: "publish year", accessor: "publishYear", align: "center" },
       { Header: "download", accessor: "download", align: "center", },
     ],
 

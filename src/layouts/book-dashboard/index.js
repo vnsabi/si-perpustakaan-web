@@ -87,7 +87,7 @@ function BookDashboard() {
 
     } else {
       setAuthenticated(false);
-      await getBooks()
+      // await getBooks()
     }
 
   }, [])

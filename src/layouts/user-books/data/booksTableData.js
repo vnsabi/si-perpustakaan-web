@@ -73,9 +73,6 @@ export default function data(books) {
         title: <Title 
           value={val.title}
         />,
-        code: <Code 
-          value={val.code}
-        />,
         qty: <Qty 
           value={val.quantity}
         />,
@@ -96,7 +93,6 @@ export default function data(books) {
     return {
       columns: [
         { Header: "title", accessor: "title", width: "30%", align: "left" },
-        { Header: "code", accessor: "code", align: "center" },
         { Header: "qty", accessor: "qty", align: "center" },
         { Header: "created at", accessor: "createdDate", align: "center" },
         { Header: "download", accessor: "download", align: "center", },
@@ -109,7 +105,6 @@ export default function data(books) {
   return {
     columns: [
       { Header: "title", accessor: "title", width: "30%", align: "left" },
-      { Header: "code", accessor: "code", align: "center" },
       { Header: "qty", accessor: "qty", align: "center" },
       { Header: "created at", accessor: "createdDate", align: "center" },
       { Header: "download", accessor: "download", align: "center", },

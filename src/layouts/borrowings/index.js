@@ -21,6 +21,7 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
 // Material Dashboard 2 React components
+import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Material Dashboard 2 React components
@@ -78,9 +79,11 @@ function Borrowings() {
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [mappingUsers, setMappingUsers] = useState([]);
 
+  const [code, setCode] = useState("");
   
   // const [expired, setExpired] = useState(dayjs('2014-08-18T21:11:54'));
   const [expiredDate, setExpiredDate] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [mappingBooks, setMappingBooks] = useState([]);
   const { columns, rows } = borrowingsTableData(borrowings);
@@ -183,18 +186,27 @@ function Borrowings() {
   }
 
   const handleSelectBook = (val) => {
+    setSelectedBook({
+      id: val.id,
+      title: val.title,
+      code,
+      quantityFromDB: val.quantity,
+      quantity: 1
+    });
+  }
+
+  const handleAddBook = (val) => {
     let selectedBooksState = [...selectedBooks];
     let checkExist = selectedBooksState.find(function(valBook) {
       return valBook.id === val.id
     });
     if(checkExist) return;
-    selectedBooksState.push({
-      id: val.id,
-      title: val.title,
-      code: val.code,
-      quantityFromDB: val.quantity,
-      quantity: 1
-    });
+    if(!selectedBook) return;
+    if(!code) return;
+    setSelectedBook(null);
+    selectedBook.code = code;
+    selectedBooksState.push(selectedBook);
+    setCode("");
     setSelectedBooks(selectedBooksState);
   }
 
@@ -208,7 +220,7 @@ function Borrowings() {
       <Autocomplete
         disablePortal
         onChange={(e, selectedVal) => handleSelectUser(selectedVal)}
-        value={selectedUser}
+        value={selectedUser ? selectedUser.label : ''}
         id="combo-box-demo"
         options={mappingUsers}
         fullWidth
@@ -222,17 +234,18 @@ function Borrowings() {
       <Autocomplete
         disablePortal
         onChange={(e, selectedVal) => handleSelectBook(selectedVal)}
-        // value={}
+        value={selectedBook ? selectedBook.title : ''}
         id="combo-box-demo"
         options={mappingBooks}
         fullWidth
-        renderInput={(params) => <TextField {...params} label="Books" />}
+        renderInput={(params) => <TextField {...params} label="Book" />}
       />
     );
   }
   
   function renderBooksList() {
     return selectedBooks.map((val) => {
+      console.log(val, "VAL>>>>")
       return (
         <SelectedBookList 
           id={val.id}
@@ -313,6 +326,29 @@ function Borrowings() {
 
                   <MDBox mb={2}>
                     <BookSelect />
+                  </MDBox>
+
+                  <MDBox mb={2}>
+                    <MDInput 
+                      type="text" 
+                      label="Code" 
+                      variant="outlined" 
+                      fullWidth 
+                      value={code}
+                      // value={username}
+                      onChange={(e) => setCode(e.target.value)}
+                    />
+                  </MDBox>
+
+                  <MDBox mb={8}>  
+                    <MDButton 
+                      variant="gradient" 
+                      color="info" 
+                      fullWidth
+                      onClick={handleAddBook}
+                    >
+                      add
+                    </MDButton>
                   </MDBox>
 
                   <MDBox mb={2}>

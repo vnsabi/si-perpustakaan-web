@@ -68,6 +68,9 @@ function Books() {
   const [title, setTite] = useState(null);
   const [code, setCode] = useState(null);
   const [qty, setQty] = useState(0);
+  const [publisher, setPublisher] = useState(null);
+  const [author, setAuthor] = useState(null);
+  const [publishYear, setPublishYear] = useState(null);
   const [ebook, setEbook] = useState(null);
   const [ebookName, setEbookName] = useState('');
 
@@ -106,16 +109,20 @@ function Books() {
   const create = () => {
     if(
       !title ||
-      !code ||
-      !qty
+      !qty ||
+      !publisher ||
+      !author ||
+      !publishYear
     ) {
       swal("Oops!", "Some field are missing!", "warning");
       return;
     }
     let payload = {
       title,
-      code,
-      quantity: qty
+      quantity: qty,
+      publisher,
+      author,
+      publishYear
     };
     axios({
       method: "POST",
@@ -224,11 +231,31 @@ function Books() {
                   <MDBox mb={2}>
                     <MDInput
                       type="text" 
-                      label="Code" 
+                      label="Publisher" 
                       variant="standard" 
                       fullWidth 
                       // value={password}
-                      onChange={(e) => setCode(e.target.value)}
+                      onChange={(e) => setPublisher(e.target.value)}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="text" 
+                      label="Author" 
+                      variant="standard" 
+                      fullWidth 
+                      // value={password}
+                      onChange={(e) => setAuthor(e.target.value)}
+                    />
+                  </MDBox>
+                  <MDBox mb={2}>
+                    <MDInput
+                      type="text" 
+                      label="Publish Year" 
+                      variant="standard" 
+                      fullWidth 
+                      // value={password}
+                      onChange={(e) => setPublishYear(e.target.value)}
                     />
                   </MDBox>
                   <MDBox mb={2}>
